@@ -1,0 +1,27 @@
+{
+    "name": "hackernews-clone",
+    "version": "1.0.0",
+    "description": "hackernews clone built using NodeJS, Prisma, React, and Apollo GraphQL",
+    "main": "server/src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fromabby/hackernews-clone.git"
+    },
+    "author": "Anne Bernadette Bonuan",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/fromabby/hackernews-clone/issues"
+    },
+    "homepage": "https://github.com/fromabby/hackernews-clone#readme",
+    "dependencies": {
+        "@prisma/client": "^4.0.0",
+        "apollo-server": "^2.25.4",
+        "graphql": "^14.7.0"
+    },
+    "devDependencies": {
+        "prisma": "^4.0.0"
+    }
+}
