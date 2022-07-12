@@ -3,11 +3,9 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET } = require('../utils')
 
 // Links 
-
 const postLink = async (_, { url, description }, context) => {
     const { userId } = context
 
-    console.log(userId)
     const newLink = await context.prisma.link.create({
         data: {
             url,
@@ -15,6 +13,9 @@ const postLink = async (_, { url, description }, context) => {
             postedBy: { connect: { id: userId } }
         },
     })
+
+    // subscription event
+    context.pubsub.publish("NEW_LINK", newLink)
 
     return newLink
 }
@@ -53,16 +54,12 @@ const deleteLink = async (_, { id }, context) => {
 
 // Authentication
 const signup = async (_, args, context) => {
-    // 1
     const password = await bcrypt.hash(args.password, 10)
 
-    // 2
     const user = await context.prisma.user.create({ data: { ...args, password } })
 
-    // 3
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
-    // 4
     return {
         token,
         user,
@@ -70,13 +67,11 @@ const signup = async (_, args, context) => {
 }
 
 const login = async (_, { email, password }, context) => {
-    // 1
     const user = await context.prisma.user.findUnique({ where: { email } })
     if (!user) {
         throw new Error('No such user found')
     }
 
-    // 2
     const valid = await bcrypt.compare(password, user.password)
     if (!valid) {
         throw new Error('Invalid password')
@@ -84,18 +79,50 @@ const login = async (_, { email, password }, context) => {
 
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
-    // 3
     return {
         token,
         user,
     }
 }
 
+// Voting
+const vote = async (_, args, context) => {
+    // 1
+    const { userId } = context
+    const { linkId } = args
+
+    console.log(userId, linkId)
+    // 2
+    const vote = await context.prisma.vote.findUnique({
+        where: {
+            linkId_userId: {
+                linkId: Number(linkId),
+                userId
+            }
+        }
+    })
+
+    if (Boolean(vote)) {
+        throw new Error(`Already voted for link: ${linkId}`)
+    }
+
+    // 3
+    const newVote = context.prisma.vote.create({
+        data: {
+            user: { connect: { id: userId } },
+            link: { connect: { id: Number(linkId) } },
+        }
+    })
+    context.pubsub.publish("NEW_VOTE", newVote)
+
+    return newVote
+}
 
 module.exports = {
     postLink,
     updateLink,
     deleteLink,
     signup,
-    login
+    login,
+    vote
 }
