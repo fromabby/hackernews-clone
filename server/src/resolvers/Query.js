@@ -24,7 +24,8 @@ const allLinks = async (_, args, context) => {
     }
 }
 
-const findLink = async (_, { id }, context) => {
+const findLink = async (_, args, context) => {
+    const { id } = args
     const link = await context.prisma.link.findUnique({
         where: {
             id

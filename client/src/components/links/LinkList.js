@@ -1,21 +1,9 @@
 import Link from './Link'
-import { useQuery, gql as graphql } from '@apollo/client'
-
-const FEED_QUERY = graphql`
-  {
-    allLinks {
-        count
-        links {
-        id
-        description
-        url
-        }
-    }
-  }
-`
+import { useQuery } from '@apollo/client'
+import { ALL_LINKS_QUERY } from '../../gql/queries'
 
 const LinkList = () => {
-    const { loading, data, error } = useQuery(FEED_QUERY)
+    const { loading, data, error } = useQuery(ALL_LINKS_QUERY)
 
     return (
         <div>

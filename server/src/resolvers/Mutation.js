@@ -3,29 +3,35 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET } = require('../utils')
 
 // Links 
-const postLink = async (_, { url, description }, context) => {
-    const { userId } = context
+const postLink = async (_, args, context) => {
+    try {
+        const { url, description } = args
+        const { userId } = context
 
-    const postedBy = userId ? {
-        connect: { id: userId }
-    } : undefined
+        const postedBy = userId ? {
+            connect: { id: userId }
+        } : undefined
 
-    const newLink = await context.prisma.link.create({
-        data: {
-            url,
-            description,
-            postedBy
-        },
-    })
+        const newLink = await context.prisma.link.create({
+            data: {
+                url,
+                description,
+                postedBy
+            },
+        })
 
-    // subscription event
-    context.pubsub.publish("NEW_LINK", newLink)
+        context.pubsub.publish("NEW_LINK", newLink)
 
-    return newLink
+        return newLink
+    } catch (error) {
+        return error
+    }
 }
 
-const updateLink = async (_, { id, description, url }, context) => {
+const updateLink = async (_, args, context) => {
     try {
+        const { id, description, url } = args
+
         const link = await context.prisma.link.update({
             where: {
                 id: Number(id)
@@ -42,8 +48,9 @@ const updateLink = async (_, { id, description, url }, context) => {
     }
 }
 
-const deleteLink = async (_, { id }, context) => {
+const deleteLink = async (_, args, context) => {
     try {
+        const { id } = args
         const link = await context.prisma.link.delete({
             where: {
                 id: Number(id)
@@ -70,7 +77,8 @@ const signup = async (_, args, context) => {
     }
 }
 
-const login = async (_, { email, password }, context) => {
+const login = async (_, args, context) => {
+    const { email, password } = args
     const user = await context.prisma.user.findUnique({ where: { email } })
     if (!user) {
         throw new Error('No such user found')
@@ -91,12 +99,9 @@ const login = async (_, { email, password }, context) => {
 
 // Voting
 const vote = async (_, args, context) => {
-    // 1
     const { userId } = context
     const { linkId } = args
 
-    console.log(userId, linkId)
-    // 2
     const vote = await context.prisma.vote.findUnique({
         where: {
             linkId_userId: {
@@ -110,13 +115,13 @@ const vote = async (_, args, context) => {
         throw new Error(`Already voted for link: ${linkId}`)
     }
 
-    // 3
     const newVote = context.prisma.vote.create({
         data: {
             user: { connect: { id: userId } },
             link: { connect: { id: Number(linkId) } },
         }
     })
+
     context.pubsub.publish("NEW_VOTE", newVote)
 
     return newVote
