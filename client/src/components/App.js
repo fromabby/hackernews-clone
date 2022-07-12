@@ -1,6 +1,7 @@
 import { CreateLink, LinkList } from './links'
 import { Login } from './auth'
 import { Header } from './layout'
+import { Search } from './search'
 
 import { Route, Routes } from 'react-router-dom'
 
@@ -18,6 +19,10 @@ function App() {
                     <Route
                         path="/login"
                         element={<Login />}
+                    />
+                    <Route
+                        path="/search"
+                        element={<Search />}
                     />
                 </Routes>
             </div>

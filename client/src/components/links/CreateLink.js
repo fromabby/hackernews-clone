@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, gql } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 import { CREATE_LINK_MUTATION } from './../../gql/mutations'
 import { ALL_LINKS_QUERY } from './../../gql/queries'
