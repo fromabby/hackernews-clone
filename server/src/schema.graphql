@@ -1,7 +1,7 @@
 type Query {
     info: String!
-    feed: [Link!]!
-    findLink(id: String): Link!
+    allLinks: [Link!]!
+    findLink(id: Int): Link!
 }
 
 type Mutation {
@@ -12,10 +12,27 @@ type Mutation {
 
     # Delete a link
     deleteLink(id: ID!): Link
+
+    # Authentication
+    signup(email: String!, password: String!, name: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    links: [Link!]!
 }
 
 type Link {
     id: ID!
     description: String!
     url: String!
+    postedBy: User
+}
+
+type AuthPayload {
+    token: String
+    user: User
 }
