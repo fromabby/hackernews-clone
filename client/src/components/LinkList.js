@@ -1,5 +1,5 @@
 import Link from './Link'
-import { useQuery, gql as graphql } from '@apollo/client';
+import { useQuery, gql as graphql } from '@apollo/client'
 
 const FEED_QUERY = graphql`
   {
@@ -12,16 +12,17 @@ const FEED_QUERY = graphql`
         }
     }
   }
-`;
+`
 
 const LinkList = () => {
-    const { data } = useQuery(FEED_QUERY)
+    const { loading, data, error } = useQuery(FEED_QUERY)
 
     return (
         <div>
-            {data && data.allLinks.links.map((link) => (
+            {loading ? <p>Loading...</p> : data && data.allLinks.links.map((link) => (
                 <Link key={link.id} link={link} />
             ))}
+            {error && <p>Error occured.</p>}
         </div>
     )
 }

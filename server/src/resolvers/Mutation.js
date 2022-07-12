@@ -6,11 +6,15 @@ const { APP_SECRET } = require('../utils')
 const postLink = async (_, { url, description }, context) => {
     const { userId } = context
 
+    const postedBy = userId ? {
+        connect: { id: userId }
+    } : undefined
+
     const newLink = await context.prisma.link.create({
         data: {
             url,
             description,
-            postedBy: { connect: { id: userId } }
+            postedBy
         },
     })
 
