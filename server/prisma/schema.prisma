@@ -14,7 +14,7 @@ model Link {
     url         String
     postedBy    User?    @relation(fields: [postedById], references: [id])
     postedById  Int?
-    vote        Vote[]
+    votes       Vote[]
 }
 
 model User {
@@ -23,7 +23,7 @@ model User {
     email    String @unique
     password String
     links    Link[]
-    Vote     Vote[]
+    votes    Vote[]
 }
 
 model Vote {

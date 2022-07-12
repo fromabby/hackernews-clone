@@ -7,8 +7,8 @@ const LinkList = () => {
 
     return (
         <div>
-            {loading ? <p>Loading...</p> : data && data.allLinks.links.map((link) => (
-                <Link key={link.id} link={link} />
+            {loading ? <p>Loading...</p> : data && data.allLinks.links.map((link, index) => (
+                <Link key={link.id} link={link} index={index} />
             ))}
             {error && <p>Error occured.</p>}
         </div>

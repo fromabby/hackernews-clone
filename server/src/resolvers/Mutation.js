@@ -8,7 +8,7 @@ const postLink = async (_, args, context) => {
         const { url, description } = args
         const { userId } = context
 
-        const postedBy = userId ? {
+        let postedBy = userId ? {
             connect: { id: userId }
         } : undefined
 
