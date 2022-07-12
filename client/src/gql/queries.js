@@ -1,27 +1,32 @@
 import { gql } from '@apollo/client'
 
 export const ALL_LINKS_QUERY = gql`
-{
-        allLinks {
+query LinksQuery(
+    $take: Int
+    $skip: Int
+    $orderBy: LinkOrderByInput
+  ) {
+    allLinks(take: $take, skip: $skip, orderBy: $orderBy) {
+      id
+      links {
         id
-        links {
-            id
-            createdAt
-            url
-            description
-            postedBy {
-            id
-            name
-            }
-            votes {
-            id
-            user {
-                id
-            }
-            }
+        createdAt
+        url
+        description
+        postedBy {
+          id
+          name
         }
+        votes {
+          id
+          user {
+            id
+          }
         }
+      }
+      count
     }
+  }
 `
 
 export const FEED_SEARCH_QUERY = gql`

@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 import { CREATE_LINK_MUTATION } from './../../gql/mutations'
 import { ALL_LINKS_QUERY } from './../../gql/queries'
+import { LINKS_PER_PAGE } from '../../constants'
 
 const CreateLink = () => {
     const navigate = useNavigate()
@@ -20,8 +21,17 @@ const CreateLink = () => {
         onError: () => navigate('/?error=cannot post'),
         // CACHING
         update: (cache, { data: { postLink } }) => {
+            const take = LINKS_PER_PAGE
+            const skip = 0
+            const orderBy = { createdAt: 'desc' }
+
             const data = cache.readQuery({
                 query: ALL_LINKS_QUERY,
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
             });
 
             cache.writeQuery({
@@ -31,6 +41,11 @@ const CreateLink = () => {
                         links: [postLink, ...data.allLinks.links]
                     }
                 },
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
             });
         },
     })

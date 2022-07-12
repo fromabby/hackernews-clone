@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
-import { AUTH_TOKEN } from '../../constants'
-import timeDifferenceForDate from '../../utils/timeDifferenceForDate'
+import { AUTH_TOKEN, LINKS_PER_PAGE } from '../../constants'
+import { timeDifferenceForDate } from '../../utils'
 import { VOTE_MUTATION } from '../../gql/mutations'
 import { ALL_LINKS_QUERY } from '../../gql/queries'
 
@@ -14,8 +14,17 @@ const Link = (props) => {
         },
         //CACHING
         update: (cache, { data: { vote } }) => {
+            const take = LINKS_PER_PAGE
+            const skip = 0
+            const orderBy = { createdAt: 'desc' }
+
             const { allLinks } = cache.readQuery({
-                query: ALL_LINKS_QUERY
+                query: ALL_LINKS_QUERY,
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
             });
 
             const updatedLinks = allLinks.links.map((feedLink) => {
@@ -34,6 +43,11 @@ const Link = (props) => {
                     allLinks: {
                         links: updatedLinks
                     }
+                },
+                variables: {
+                    take,
+                    skip,
+                    orderBy
                 }
             });
         }
