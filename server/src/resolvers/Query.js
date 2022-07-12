@@ -1,9 +1,27 @@
-const info = () => `This is the API of a Hackernews Clone`
+const allLinks = async (_, args, context) => {
+    const { filter, skip, take, orderBy } = args
+    const where = filter
+        ? {
+            OR: [
+                { description: { contains: filter } },
+                { url: { contains: filter } },
+            ],
+        }
+        : {}
 
-const allLinks = async (_, __, context) => {
-    const links = await context.prisma.link.findMany()
+    const links = await context.prisma.link.findMany({
+        where,
+        skip,
+        take,
+        orderBy
+    })
 
-    return links
+    const count = await context.prisma.link.count({ where })
+
+    return {
+        links,
+        count,
+    }
 }
 
 const findLink = async (_, { id }, context) => {
@@ -17,7 +35,6 @@ const findLink = async (_, { id }, context) => {
 }
 
 module.exports = {
-    info,
     allLinks,
     findLink
 }

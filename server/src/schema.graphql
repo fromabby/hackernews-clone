@@ -4,9 +4,18 @@ type Subscription {
 }
 
 type Query {
-    info: String!
-    allLinks: [Link!]!
+    allLinks(
+        filter: String
+        skip: Int
+        take: Int
+        orderBy: LinkOrderByInput
+    ): AllLinks!
     findLink(id: Int): Link!
+}
+
+type AllLinks {
+    links: [Link!]!
+    count: Int!
 }
 
 type Mutation {
@@ -50,4 +59,16 @@ type Vote {
     id: ID!
     link: Link!
     user: User!
+}
+
+# Sorting
+input LinkOrderByInput {
+    description: Sort
+    url: Sort
+    createdAt: Sort
+}
+
+enum Sort {
+    asc
+    desc
 }
