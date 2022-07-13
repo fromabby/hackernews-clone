@@ -1,13 +1,12 @@
 import Link from './Link'
 import { useQuery } from '@apollo/client'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ALL_LINKS_QUERY } from '../../gql/queries'
 import { NEW_LINKS_SUBSCRIPTION, NEW_VOTES_SUBSCRIPTION } from '../../gql/subscriptions'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { getQueryVariables, getLinksToRender } from '../../utils'
 import { LINKS_PER_PAGE } from '../../constants'
 
 const LinkList = () => {
-    //pagination
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -16,7 +15,6 @@ const LinkList = () => {
     const page = parseInt(pageIndexParams[pageIndexParams.length - 1])
     const pageIndex = page ? (page - 1) * LINKS_PER_PAGE : 0
 
-
     const { loading, data, error, subscribeToMore } = useQuery(ALL_LINKS_QUERY, {
         variables: getQueryVariables(isNewPage, page),
     })
@@ -24,26 +22,29 @@ const LinkList = () => {
     subscribeToMore({
         document: NEW_LINKS_SUBSCRIPTION,
         updateQuery: (prev, { subscriptionData }) => {
-            if (!subscriptionData.data) return prev
-            const newLink = subscriptionData.data.newLink
-            const exists = prev.allLinks.links.find(
+            const { data } = subscriptionData
+            const { allLinks } = prev
+
+            if (!data) return prev
+
+            const newLink = data.newLink
+            const exists = allLinks.links.find(
                 ({ id }) => id === newLink.id
             )
+
             if (exists) return prev
 
             return Object.assign({}, prev, {
                 allLinks: {
-                    links: [newLink, ...prev.allLinks.links],
-                    count: prev.allLinks.links.length + 1,
-                    __typename: prev.allLinks.__typename
+                    links: [newLink, ...allLinks.links],
+                    count: allLinks.links.length + 1,
+                    __typename: allLinks.__typename
                 }
             })
         }
     })
 
-    subscribeToMore({
-        document: NEW_VOTES_SUBSCRIPTION
-    })
+    subscribeToMore({ document: NEW_VOTES_SUBSCRIPTION })
 
     return (
         <>
@@ -75,10 +76,7 @@ const LinkList = () => {
                             <div
                                 className="pointer"
                                 onClick={() => {
-                                    if (
-                                        page <=
-                                        data.allLinks.count / LINKS_PER_PAGE
-                                    ) {
+                                    if (page <= data.allLinks.count / LINKS_PER_PAGE) {
                                         const nextPage = page + 1
                                         navigate(`/new/${nextPage}`)
                                     }

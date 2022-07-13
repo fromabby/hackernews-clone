@@ -7,19 +7,20 @@ import { LINKS_PER_PAGE } from '../../constants'
 
 const CreateLink = () => {
     const navigate = useNavigate()
-    const [formState, setFormState] = useState({
+    const [linkInfo, setLinkInfo] = useState({
         description: '',
         url: ''
     })
 
+    const { description, url } = linkInfo
+
     const [createLink] = useMutation(CREATE_LINK_MUTATION, {
         variables: {
-            description: formState.description,
-            url: formState.url
+            description,
+            url
         },
         onCompleted: () => navigate('/'),
         onError: () => navigate('/?error=cannot post'),
-        // CACHING
         update: (cache, { data: { postLink } }) => {
             const take = LINKS_PER_PAGE
             const skip = 0
@@ -32,7 +33,7 @@ const CreateLink = () => {
                     skip,
                     orderBy
                 }
-            });
+            })
 
             cache.writeQuery({
                 query: ALL_LINKS_QUERY,
@@ -46,27 +47,25 @@ const CreateLink = () => {
                     skip,
                     orderBy
                 }
-            });
+            })
         },
     })
-
-    const submitHandler = e => {
-        e.preventDefault()
-        createLink()
-    }
 
     return (
         <div>
             <form
-                onSubmit={submitHandler}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    createLink()
+                }}
             >
                 <div className="flex flex-column mt3">
                     <input
                         className="mb2"
-                        value={formState.description}
+                        value={description}
                         onChange={(e) =>
-                            setFormState({
-                                ...formState,
+                            setLinkInfo({
+                                ...linkInfo,
                                 description: e.target.value
                             })
                         }
@@ -75,10 +74,10 @@ const CreateLink = () => {
                     />
                     <input
                         className="mb2"
-                        value={formState.url}
+                        value={url}
                         onChange={(e) =>
-                            setFormState({
-                                ...formState,
+                            setLinkInfo({
+                                ...linkInfo,
                                 url: e.target.value
                             })
                         }

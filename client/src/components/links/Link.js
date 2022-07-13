@@ -12,7 +12,6 @@ const Link = (props) => {
         variables: {
             linkId: link.id
         },
-        //CACHING
         update: (cache, { data: { vote } }) => {
             const take = LINKS_PER_PAGE
             const skip = 0
@@ -25,17 +24,17 @@ const Link = (props) => {
                     skip,
                     orderBy
                 }
-            });
+            })
 
             const updatedLinks = allLinks.links.map((feedLink) => {
                 if (feedLink.id === link.id) {
                     return {
                         ...feedLink,
                         votes: [...feedLink.votes, vote]
-                    };
+                    }
                 }
-                return feedLink;
-            });
+                return feedLink
+            })
 
             cache.writeQuery({
                 query: ALL_LINKS_QUERY,
@@ -49,7 +48,7 @@ const Link = (props) => {
                     skip,
                     orderBy
                 }
-            });
+            })
         }
     })
 

@@ -24,6 +24,12 @@ const Login = () => {
         onCompleted: ({ login }) => {
             localStorage.setItem(AUTH_TOKEN, login.token)
             navigate('/?success=Logged in')
+        },
+        onError: () => {
+            setCredentials({
+                email: '',
+                password: ''
+            })
         }
     })
 
@@ -36,6 +42,13 @@ const Login = () => {
         onCompleted: ({ signup }) => {
             localStorage.setItem(AUTH_TOKEN, signup.token)
             navigate('/login')
+        },
+        onError: () => {
+            setCredentials({
+                email: '',
+                password: '',
+                name: ''
+            })
         }
     })
 
@@ -97,9 +110,7 @@ const Login = () => {
                         })
                     }
                 >
-                    {login
-                        ? 'need to create an account?'
-                        : 'already have an account?'}
+                    {login ? 'need to create an account?' : 'already have an account?'}
                 </button>
             </div>
         </div>

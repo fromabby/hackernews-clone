@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {DateTime} current Current time
+ * @param {DateTime} previous Date when post is created
+ * @returns {string} time difference from current to originally created date
+ */
+
 const timeDifference = (current, previous) => {
     const milliSecondsPerMinute = 60 * 1000
     const milliSecondsPerHour = milliSecondsPerMinute * 60
@@ -38,6 +45,11 @@ const timeDifference = (current, previous) => {
     }
 }
 
+/**
+ * 
+ * @param {DateTime} date Date when post is created
+ * @returns {string} time difference from current to originally created date
+ */
 const timeDifferenceForDate = (date) => {
     const now = new Date().getTime()
     const updated = new Date(date).getTime()
