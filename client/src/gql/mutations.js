@@ -56,3 +56,27 @@ export const CREATE_LINK_MUTATION = gql`
     }
   }
 `
+
+
+export const UPDATE_LINK_MUTATION = gql`
+mutation UpdateLinkMutation(
+    $id: ID!
+    $description: String!
+    $url: String!
+) {
+  updateLink(id: $id, description: $description, url: $url) {
+    	id
+ 		description
+        url
+  }
+}
+`
+
+export const DELETE_LINK_MUTATION = gql`
+mutation DeleteLink(
+    $id: ID!
+) {
+ 	deleteLink(id: $id) {
+        id
+ 	}
+}`

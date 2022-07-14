@@ -54,3 +54,15 @@ query SearchFilter(
     }
 }
 `
+
+export const SINGLE_LINK_QUERY = gql`
+query SingleLink(
+    $id: Int!
+) {
+    findLink(id: $id) {
+        id
+        url
+        description
+    }
+}
+`

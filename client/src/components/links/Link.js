@@ -1,22 +1,57 @@
 import { useMutation } from '@apollo/client'
-import { AUTH_TOKEN, LINKS_PER_PAGE } from '../../constants'
-import { timeDifferenceForDate } from '../../utils'
-import { VOTE_MUTATION } from '../../gql/mutations'
-import { ALL_LINKS_QUERY } from '../../gql/queries'
+import { Link as RouteLink } from 'react-router-dom'
+
+import { AUTH_TOKEN, LINKS_PER_PAGE } from 'constants'
+import { timeDifferenceForDate } from 'utils'
+import { VOTE_MUTATION, DELETE_LINK_MUTATION } from 'gql/mutations'
+import { ALL_LINKS_QUERY } from 'gql/queries'
 
 const Link = (props) => {
     const { index, link } = props
     const authToken = localStorage.getItem(AUTH_TOKEN)
+
+    const take = LINKS_PER_PAGE
+    const skip = 0
+    const orderBy = { createdAt: 'desc' }
+
+    const [deleteLink] = useMutation(DELETE_LINK_MUTATION, {
+        variables: {
+            id: link.id
+        },
+        update: (cache, { data: { deleteLink } }) => {
+            const { allLinks } = cache.readQuery({
+                query: ALL_LINKS_QUERY,
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
+            })
+
+            const updatedLinks = allLinks.links.filter((feedLink) => (feedLink.id !== deleteLink.id))
+
+            cache.writeQuery({
+                query: ALL_LINKS_QUERY,
+                data: {
+                    allLinks: {
+                        links: updatedLinks
+                    }
+                },
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
+            })
+
+        }
+    })
 
     const [vote] = useMutation(VOTE_MUTATION, {
         variables: {
             linkId: link.id
         },
         update: (cache, { data: { vote } }) => {
-            const take = LINKS_PER_PAGE
-            const skip = 0
-            const orderBy = { createdAt: 'desc' }
-
             const { allLinks } = cache.readQuery({
                 query: ALL_LINKS_QUERY,
                 variables: {
@@ -77,6 +112,10 @@ const Link = (props) => {
                         {timeDifferenceForDate(link.createdAt)}
                     </div>
                 )}
+                <RouteLink to={`/link/${link.id}`}>
+                    Update
+                </RouteLink>
+                <button onClick={deleteLink}>Delete</button>
             </div>
         </div>
     )

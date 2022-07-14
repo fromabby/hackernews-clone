@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { AUTH_TOKEN } from '../../constants'
-import { LOGIN_MUTATION, SIGNUP_MUTATION } from '../../gql/mutations'
+import { AUTH_TOKEN } from 'constants'
+import { LOGIN_MUTATION, SIGNUP_MUTATION } from 'gql/mutations'
 
 const Login = () => {
     const navigate = useNavigate()

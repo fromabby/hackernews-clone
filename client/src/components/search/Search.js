@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { Link } from '../links'
-import { FEED_SEARCH_QUERY } from '../../gql/queries'
+import { Link } from 'components/links'
+import { FEED_SEARCH_QUERY } from 'gql/queries'
 
 const Search = () => {
     const [searchFilter, setSearchFilter] = useState('')

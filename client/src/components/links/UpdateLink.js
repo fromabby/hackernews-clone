@@ -1,62 +1,53 @@
-import { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import { CREATE_LINK_MUTATION } from 'gql/mutations'
-import { ALL_LINKS_QUERY } from 'gql/queries'
-import { LINKS_PER_PAGE } from 'constants'
+import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useQuery, useMutation } from '@apollo/client'
+import { SINGLE_LINK_QUERY } from 'gql/queries'
+import { UPDATE_LINK_MUTATION } from 'gql/mutations'
 
-const CreateLink = () => {
+const UpdateLink = () => {
+    const { id } = useParams()
     const navigate = useNavigate()
+
+    const { loading, data, error } = useQuery(SINGLE_LINK_QUERY, {
+        variables: {
+            id: Number(id)
+        }
+    })
+
     const [linkInfo, setLinkInfo] = useState({
+        linkId: 0,
         description: '',
         url: ''
     })
 
-    const { description, url } = linkInfo
+    const { linkId, description, url } = linkInfo
 
-    const [createLink] = useMutation(CREATE_LINK_MUTATION, {
+    const [updateLink] = useMutation(UPDATE_LINK_MUTATION, {
         variables: {
+            id: linkId,
             description,
             url
         },
-        onCompleted: () => navigate('/'),
-        onError: () => navigate('/?error=cannot post'),
-        update: (cache, { data: { postLink } }) => {
-            const take = LINKS_PER_PAGE
-            const skip = 0
-            const orderBy = { createdAt: 'desc' }
-
-            const data = cache.readQuery({
-                query: ALL_LINKS_QUERY,
-                variables: {
-                    take,
-                    skip,
-                    orderBy
-                }
-            })
-
-            cache.writeQuery({
-                query: ALL_LINKS_QUERY,
-                data: {
-                    allLinks: {
-                        links: [postLink, ...data.allLinks.links]
-                    }
-                },
-                variables: {
-                    take,
-                    skip,
-                    orderBy
-                }
-            })
-        },
+        onCompleted: () => {
+            navigate('/')
+        }
     })
 
+    useEffect(() => {
+        data && setLinkInfo({
+            linkId: data.findLink.id,
+            description: data.findLink.description,
+            url: data.findLink.url
+        })
+    }, [data])
+
     return (
+        !loading &&
         <div>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    createLink()
+                    updateLink()
                 }}
             >
                 <div className="flex flex-column mt3">
@@ -85,10 +76,11 @@ const CreateLink = () => {
                         placeholder="The URL for the link"
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Update</button>
             </form>
+            {error && <p>{error}</p>}
         </div>
     )
 }
 
-export default CreateLink
+export default UpdateLink

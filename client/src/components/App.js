@@ -1,7 +1,7 @@
-import { CreateLink, LinkList } from './links'
-import { Login } from './auth'
-import { Header } from './layout'
-import { Search } from './search'
+import { CreateLink, LinkList, UpdateLink } from 'components/links'
+import { Login } from 'components/auth'
+import { Header } from 'components/layout'
+import { Search } from 'components/search'
 
 import { Route, Routes, Navigate } from 'react-router-dom'
 
@@ -28,6 +28,10 @@ function App() {
                     <Route
                         path="/new/:page"
                         element={<LinkList />}
+                    />
+                    <Route
+                        path="/link/:id"
+                        element={<UpdateLink />}
                     />
                 </Routes>
             </div>

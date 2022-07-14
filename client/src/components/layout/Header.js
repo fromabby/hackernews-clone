@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { AUTH_TOKEN } from '../../constants'
+import { AUTH_TOKEN } from 'constants'
 
 const Header = () => {
     const navigate = useNavigate()

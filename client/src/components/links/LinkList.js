@@ -1,10 +1,10 @@
-import Link from './Link'
+import { Link } from 'components/links'
 import { useQuery } from '@apollo/client'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ALL_LINKS_QUERY } from '../../gql/queries'
-import { NEW_LINKS_SUBSCRIPTION, NEW_VOTES_SUBSCRIPTION } from '../../gql/subscriptions'
-import { getQueryVariables, getLinksToRender } from '../../utils'
-import { LINKS_PER_PAGE } from '../../constants'
+import { ALL_LINKS_QUERY } from 'gql/queries'
+import { NEW_LINKS_SUBSCRIPTION, NEW_VOTES_SUBSCRIPTION } from 'gql/subscriptions'
+import { getQueryVariables, getLinksToRender } from 'utils'
+import { LINKS_PER_PAGE } from 'constants'
 
 const LinkList = () => {
     const location = useLocation()
