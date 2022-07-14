@@ -36,7 +36,20 @@ const findLink = async (_, args, context) => {
     return link
 }
 
+const profile = async (_, args, context) => {
+    const { id } = args
+
+    const user = await context.prisma.user.findUnique({
+        where: {
+            id
+        }
+    })
+
+    return user
+}
+
 module.exports = {
     allLinks,
-    findLink
+    findLink,
+    profile
 }

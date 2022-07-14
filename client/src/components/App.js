@@ -1,5 +1,5 @@
 import { CreateLink, LinkList, UpdateLink } from 'components/links'
-import { Login } from 'components/auth'
+import { Login, Profile } from 'components/auth'
 import { Header } from 'components/layout'
 import { Search } from 'components/search'
 
@@ -32,6 +32,10 @@ function App() {
                     <Route
                         path="/link/:id"
                         element={<UpdateLink />}
+                    />
+                    <Route
+                        path="/profile/:id"
+                        element={<Profile />}
                     />
                 </Routes>
             </div>

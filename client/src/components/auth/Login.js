@@ -23,6 +23,7 @@ const Login = () => {
         },
         onCompleted: ({ login }) => {
             localStorage.setItem(AUTH_TOKEN, login.token)
+            localStorage.setItem('User', JSON.stringify(login.user))
             navigate('/?success=Logged in')
         },
         onError: () => {

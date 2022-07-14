@@ -5,6 +5,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const authToken = localStorage.getItem(AUTH_TOKEN)
+    const { id, name } = JSON.parse(localStorage.getItem('User'))
 
     return (
         <div className="flex pa1 justify-between nowrap orange">
@@ -21,13 +22,6 @@ const Header = () => {
                 </Link>
                 <div className="ml1">|</div>
                 <Link
-                    to="/create"
-                    className="ml1 no-underline black"
-                >
-                    submit
-                </Link>
-                <div className="ml1">|</div>
-                <Link
                     to="/search"
                     className="ml1 no-underline black"
                 >
@@ -36,15 +30,31 @@ const Header = () => {
                 <div className="ml1">|</div>
                 <div className="flex flex-fixed">
                     {authToken ? (
-                        <div
-                            className="ml1 pointer black"
-                            onClick={() => {
-                                localStorage.removeItem(AUTH_TOKEN);
-                                navigate(`/`);
-                            }}
-                        >
-                            logout
-                        </div>
+                        <>
+                            <Link
+                                to="/create"
+                                className="ml1 no-underline black"
+                            >
+                                submit
+                            </Link>
+                            <div className="ml1">|</div>
+                            <Link
+                                to={`/profile/${id}`}
+                                className="ml1 no-underline black"
+                            >
+                                {name}'s Profile
+                            </Link>
+                            <div className="ml1">|</div>
+                            <div
+                                className="ml1 pointer black"
+                                onClick={() => {
+                                    localStorage.removeItem(AUTH_TOKEN);
+                                    navigate(`/`);
+                                }}
+                            >
+                                logout
+                            </div>
+                        </>
                     ) : (
                         <Link
                             to="/login"

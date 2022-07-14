@@ -7,6 +7,10 @@ mutation Login (
 ) {
     login(email: $email, password: $password) {
         token
+        user {
+            id
+            name
+        }
     }
 }
 `

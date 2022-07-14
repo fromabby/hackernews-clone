@@ -9,6 +9,7 @@ import { ALL_LINKS_QUERY } from 'gql/queries'
 const Link = (props) => {
     const { index, link } = props
     const authToken = localStorage.getItem(AUTH_TOKEN)
+    const { id: loggedInUser } = JSON.parse(localStorage.getItem('User'))
 
     const take = LINKS_PER_PAGE
     const skip = 0
@@ -87,6 +88,8 @@ const Link = (props) => {
         }
     })
 
+    const { id } = link.postedBy ? link.postedBy : ''
+
     return (
         <div className="flex mt2 items-start">
             <div className="flex items-center">
@@ -105,17 +108,19 @@ const Link = (props) => {
                 <div>
                     {link.description} ({link.url})
                 </div>
-                {(
-                    <div className="f6 lh-copy gray">
-                        {link.votes ? link.votes?.length : 0} votes | by{' '}
-                        {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
-                        {timeDifferenceForDate(link.createdAt)}
-                    </div>
+                <div className="f6 lh-copy gray">
+                    {link.votes ? link.votes?.length : 0} votes | by{' '}
+                    {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
+                    {timeDifferenceForDate(link.createdAt)}
+                </div>
+                {authToken && id === loggedInUser && (
+                    <>
+                        <RouteLink to={`/link/${link.id}`}>
+                            Update
+                        </RouteLink>
+                        <button onClick={deleteLink}>Delete</button>
+                    </>
                 )}
-                <RouteLink to={`/link/${link.id}`}>
-                    Update
-                </RouteLink>
-                <button onClick={deleteLink}>Delete</button>
             </div>
         </div>
     )

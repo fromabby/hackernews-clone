@@ -11,6 +11,7 @@ type Query {
         orderBy: LinkOrderByInput
     ): AllLinks!
     findLink(id: Int): Link!
+    profile(id: Int): User!
 }
 
 type AllLinks {

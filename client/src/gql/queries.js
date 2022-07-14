@@ -66,3 +66,15 @@ query SingleLink(
     }
 }
 `
+
+export const PROFILE_QUERY = gql`
+query Profile(
+    $id: Int!
+){
+  profile(id: $id) {
+    id
+    name
+    email
+  }
+}
+`
