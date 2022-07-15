@@ -4,9 +4,10 @@
     "description": "hackernews clone built using NodeJS, Prisma, React, and Apollo GraphQL",
     "main": "server/src/index.js",
     "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\"",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon server/src/index.js",
-        "start": "concurrently \"npm run dev\" \"cd client && npm start\" --names \"SERVER,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\""
+        "server": "nodemon server/src/index.js",
+        "client": "cd client && npm start"
     },
     "repository": {
         "type": "git",

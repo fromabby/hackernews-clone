@@ -75,6 +75,19 @@ query Profile(
     id
     name
     email
+    links {
+        id
+        description
+        url
+        createdAt
+        postedBy {
+            id
+            name
+        }
+        votes {
+            id
+        }
+    }
   }
 }
 `
