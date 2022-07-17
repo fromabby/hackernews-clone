@@ -48,8 +48,21 @@ const profile = async (_, args, context) => {
     return user
 }
 
+const allComments = async (_, args, context) => {
+    const { linkId } = args
+
+    const comments = await context.prisma.comment.findMany({
+        where: {
+            linkId
+        }
+    })
+
+    return comments
+}
+
 module.exports = {
     allLinks,
     findLink,
-    profile
+    profile,
+    allComments
 }

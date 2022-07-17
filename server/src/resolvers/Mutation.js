@@ -133,11 +133,26 @@ const vote = async (_, args, context) => {
     return newVote
 }
 
+const postComment = async (_, args, context) => {
+    const { linkId, text, userId } = args
+
+    const comment = await context.prisma.comment.create({
+        data: {
+            text,
+            user: { connect: { id: Number(userId) } },
+            link: { connect: { id: Number(linkId) } },
+        },
+    })
+
+    return comment
+}
+
 module.exports = {
     postLink,
     updateLink,
     deleteLink,
     signup,
     login,
-    vote
+    vote,
+    postComment
 }

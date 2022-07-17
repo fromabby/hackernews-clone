@@ -13,6 +13,7 @@ type Query {
     ): AllLinks!
     findLink(id: Int): Link!
     profile(id: Int): User!
+    allComments(linkId: Int): [Comment!]!
 }
 
 type AllLinks {
@@ -35,6 +36,8 @@ type Mutation {
 
     # Voting
     vote(linkId: ID!): Vote
+
+    postComment(text: String, linkId: ID!, userId: ID!): Comment
 }
 
 type User {
@@ -63,6 +66,13 @@ type Vote {
     id: ID!
     link: Link
     user: User
+}
+
+type Comment {
+    id: ID!
+    text: String!
+    user: User
+    link: Link
 }
 
 # Sorting
