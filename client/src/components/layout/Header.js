@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AUTH_TOKEN } from 'constants'
 
@@ -5,7 +6,20 @@ const Header = () => {
     const navigate = useNavigate()
 
     const authToken = localStorage.getItem(AUTH_TOKEN)
-    const { id, name } = JSON.parse(localStorage.getItem('User'))
+
+    const [user, setUser] = useState({
+        id: 0,
+        name: ''
+    })
+
+    const { id, name } = user
+
+    useEffect(() => {
+        if (localStorage.getItem('User') !== null) {
+
+            setUser(JSON.parse(localStorage.getItem('User')))
+        }
+    }, [])
 
     return (
         <div className="flex pa1 justify-between nowrap orange">

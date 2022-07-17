@@ -101,28 +101,34 @@ const login = async (_, args, context) => {
 const vote = async (_, args, context) => {
     const { userId } = context
     const { linkId } = args
-
-    const vote = await context.prisma.vote.findUnique({
-        where: {
-            linkId_userId: {
-                linkId: Number(linkId),
-                userId
-            }
+    const where = {
+        linkId_userId: {
+            linkId: Number(linkId),
+            userId
         }
-    })
-
-    if (Boolean(vote)) {
-        throw new Error(`Already voted for link: ${linkId}`)
     }
 
-    const newVote = context.prisma.vote.create({
-        data: {
-            user: { connect: { id: userId } },
-            link: { connect: { id: Number(linkId) } },
-        }
-    })
+    const vote = await context.prisma.vote.findUnique({ where })
 
-    context.pubsub.publish("NEW_VOTE", newVote)
+    let newVote
+
+    if (Boolean(vote)) {
+        // throw new Error(`Already voted for link: ${linkId}`)
+        // Dislike (Delete vote)
+        newVote = await context.prisma.vote.delete({ where })
+
+        context.pubsub.publish("DELETE_VOTE", newVote)
+    } else {
+        newVote = await context.prisma.vote.create({
+            data: {
+                user: { connect: { id: userId } },
+                link: { connect: { id: Number(linkId) } },
+            }
+        })
+
+        // not sure how to subscribe this
+        context.pubsub.publish("NEW_VOTE", newVote)
+    }
 
     return newVote
 }

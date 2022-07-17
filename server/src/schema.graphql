@@ -1,6 +1,7 @@
 type Subscription {
     newLink: Link
     newVote: Vote
+    deleteVote: Vote
 }
 
 type Query {
@@ -17,7 +18,6 @@ type Query {
 type AllLinks {
     id: String!
     links: [Link!]!
-    count: Int!
 }
 
 type Mutation {
@@ -61,8 +61,8 @@ type AuthPayload {
 
 type Vote {
     id: ID!
-    link: Link!
-    user: User!
+    link: Link
+    user: User
 }
 
 # Sorting

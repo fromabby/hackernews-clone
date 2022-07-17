@@ -24,7 +24,6 @@ query LinksQuery(
           }
         }
       }
-      count
     }
   }
 `

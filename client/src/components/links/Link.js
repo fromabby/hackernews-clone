@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { Link as RouteLink } from 'react-router-dom'
 
@@ -9,7 +10,14 @@ import { ALL_LINKS_QUERY } from 'gql/queries'
 const Link = (props) => {
     const { index, link } = props
     const authToken = localStorage.getItem(AUTH_TOKEN)
-    const { id: loggedInUser } = JSON.parse(localStorage.getItem('User'))
+
+    const [loggedInUser, setLoggedInUser] = useState(0)
+
+    useEffect(() => {
+        if (localStorage.getItem('User') !== null) {
+            setLoggedInUser(JSON.parse(localStorage.getItem('User')).id)
+        }
+    }, [])
 
     const take = LINKS_PER_PAGE
     const skip = 0
@@ -52,6 +60,9 @@ const Link = (props) => {
         variables: {
             linkId: link.id
         },
+        onError: (error) => {
+            console.log(error)
+        },
         update: (cache, { data: { vote } }) => {
             const { allLinks } = cache.readQuery({
                 query: ALL_LINKS_QUERY,
@@ -61,7 +72,6 @@ const Link = (props) => {
                     orderBy
                 }
             })
-
             const updatedLinks = allLinks.links.map((feedLink) => {
                 if (feedLink.id === link.id) {
                     return {
