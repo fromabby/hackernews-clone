@@ -144,7 +144,7 @@ const postComment = async (_, args, context) => {
         },
     })
 
-    // await context.prisma.comment.deleteMany()
+    context.pubsub.publish("NEW_COMMENT", comment)
 
     return comment
 }

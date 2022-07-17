@@ -47,3 +47,20 @@ subscription {
   }
 }
 `
+
+export const NEW_COMMENT_SUBSCRIPTION = gql`
+subscription {
+  newComment {
+    id
+    text
+    createdAt
+    user {
+      id
+      name
+    }
+    link {
+      id
+    }
+  }
+}
+`

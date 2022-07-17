@@ -20,6 +20,9 @@ const CommentBox = ({ linkId }) => {
             userId,
             linkId,
             text
+        },
+        onCompleted: () => {
+            setText('')
         }
     })
 
@@ -32,6 +35,7 @@ const CommentBox = ({ linkId }) => {
                 }}
                 onChange={e => setText(e.target.value)}
                 required
+                value={text}
             ></textarea>
             <button
                 className="pointer mr2 button"

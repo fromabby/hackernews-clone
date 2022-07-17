@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom'
 import { SINGLE_LINK_QUERY } from 'gql/queries'
 import { CommentList, CommentBox } from 'components/comments'
 import { timeDifferenceForDate } from 'utils'
-
+import { NEW_COMMENT_SUBSCRIPTION } from 'gql/subscriptions'
 const LinkPage = () => {
     const { id } = useParams()
 
-    const { data, loading, error } = useQuery(SINGLE_LINK_QUERY, {
+    const { data, loading, subscribeToMore } = useQuery(SINGLE_LINK_QUERY, {
         variables: {
             id: Number(id)
         }
@@ -38,6 +38,31 @@ const LinkPage = () => {
             createdAt: data.findLink.createdAt,
         })
     }, [data])
+
+    subscribeToMore({
+        document: NEW_COMMENT_SUBSCRIPTION,
+        updateQuery: (prev, { subscriptionData }) => {
+            const { data } = subscriptionData
+            const { findLink } = prev
+
+            if (!data) return prev
+
+            const newComment = data.newComment
+            const exists = findLink.comments.find(
+                ({ id }) => id === newComment.id
+            )
+
+            if (exists) return prev
+
+            return Object.assign({}, prev, {
+                findLink: {
+                    ...findLink,
+                    comments: [...findLink.comments, newComment],
+                    __typename: findLink.__typename
+                }
+            })
+        }
+    })
 
     return (
         <div className="ml1">

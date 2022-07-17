@@ -9,12 +9,18 @@ const newVote = {
 }
 
 const deleteVote = {
-    subscribe: (_, __, context, ___) => context.pubsub.asyncIterator("DELETe_VOTE"),
+    subscribe: (_, __, context, ___) => context.pubsub.asyncIterator("DELETE_VOTE"),
+    resolve: payload => payload
+}
+
+const newComment = {
+    subscribe: (_, __, context, ___) => context.pubsub.asyncIterator("NEW_COMMENT"),
     resolve: payload => payload
 }
 
 module.exports = {
     newLink,
     newVote,
-    deleteVote
+    deleteVote,
+    newComment
 }

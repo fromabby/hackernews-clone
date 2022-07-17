@@ -23,6 +23,9 @@ query LinksQuery(
             id
           }
         }
+        comments {
+            id
+        }
       }
     }
   }

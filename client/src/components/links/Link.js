@@ -116,15 +116,16 @@ const Link = (props) => {
             </div>
             <div className="ml1">
                 <div>
-                    {link.description} ({link.url})
-                </div>
-                <div className="f6 lh-copy gray">
-                    {link.votes ? link.votes?.length : 0} votes | by{' '}
-                    {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
-                    {timeDifferenceForDate(link.createdAt)}
+                    {link.description} ({link.url}) {' '}
                     <RouteLink to={`/view/link/${link.id}`}>
                         View
                     </RouteLink>
+                </div>
+                <div className="f6 lh-copy gray">
+                    {link.votes ? link.votes?.length : 0} votes | {' '}
+                    {link.comments ? link.comments?.length : 0} comments | by{' '}
+                    {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
+                    {timeDifferenceForDate(link.createdAt)}
                 </div>
                 {authToken && id === loggedInUser && (
                     <>

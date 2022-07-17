@@ -2,6 +2,7 @@ type Subscription {
     newLink: Link
     newVote: Vote
     deleteVote: Vote
+    newComment: Comment
 }
 
 type Query {
