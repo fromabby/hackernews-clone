@@ -62,6 +62,20 @@ query SingleLink(
         id
         url
         description
+        comments {
+            id
+            text
+            createdAt
+            user {
+                id
+                name
+            }
+        }
+        postedBy {
+            id
+            name
+        }
+        createdAt
     }
 }
 `

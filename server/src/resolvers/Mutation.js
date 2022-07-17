@@ -144,6 +144,8 @@ const postComment = async (_, args, context) => {
         },
     })
 
+    // await context.prisma.comment.deleteMany()
+
     return comment
 }
 

@@ -4,6 +4,7 @@ const User = require('./User')
 const Link = require('./Link')
 const Subscription = require('./Subscription')
 const Vote = require('./Vote')
+const Comment = require('./Comment')
 
 module.exports = {
     Query,
@@ -11,5 +12,6 @@ module.exports = {
     Subscription,
     User,
     Link,
-    Vote
+    Vote,
+    Comment
 }

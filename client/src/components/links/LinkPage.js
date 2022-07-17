@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 import { SINGLE_LINK_QUERY } from 'gql/queries'
-import { CommentList } from 'components/comments'
+import { CommentList, CommentBox } from 'components/comments'
+import { timeDifferenceForDate } from 'utils'
 
 const LinkPage = () => {
     const { id } = useParams()
@@ -17,28 +18,42 @@ const LinkPage = () => {
         linkId: 0,
         description: '',
         url: '',
-        comments: []
+        comments: [],
+        user: {},
+        createdAt: '',
+        postedBy: {},
+        votes: []
     })
 
-    const { linkId, description, url, comments } = linkInfo
+    const { linkId, description, url, comments, createdAt, postedBy, votes } = linkInfo
 
     useEffect(() => {
         data && setLinkInfo({
             linkId: data.findLink.id,
             description: data.findLink.description,
             url: data.findLink.url,
-            comments: data.findLink.comments
+            comments: data.findLink.comments,
+            postedBy: data.findLink.postedBy,
+            votes: data.findLink.votes,
+            createdAt: data.findLink.createdAt,
         })
     }, [data])
 
     return (
-        <div>
+        <div className="ml1">
             {!loading && data && <>
-                {linkId}
-                {description}
-                {url}
+                <div>
+                    <h3>{description} ({url})</h3>
+                </div>
+                <div className="f6 lh-copy gray">
+                    {votes ? votes?.length : 0} votes | by{' '}
+                    {postedBy ? postedBy.name : 'Unknown'}{' '}
+                    {timeDifferenceForDate(createdAt)}
+                </div>
+                <hr style={{ margin: '10px 0' }} />
+                <CommentList comments={comments} />
+                <CommentBox linkId={linkId} />
             </>}
-            <CommentList comments={comments} />
         </div>
     )
 }

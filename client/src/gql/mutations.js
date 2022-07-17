@@ -84,3 +84,20 @@ mutation DeleteLink(
         id
  	}
 }`
+
+export const POST_COMMENT_MUTATION = gql`
+mutation PostComment(
+  $linkId: ID! 
+  $text:String! 
+  $userId:ID!
+) {
+  postComment(text:$text,linkId:$linkId,userId:$userId) {
+		id
+        text
+        createdAt
+        user {
+            name
+        }
+  }
+}
+`

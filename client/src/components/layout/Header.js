@@ -16,7 +16,6 @@ const Header = () => {
 
     useEffect(() => {
         if (localStorage.getItem('User') !== null) {
-
             setUser(JSON.parse(localStorage.getItem('User')))
         }
     }, [])
@@ -62,8 +61,9 @@ const Header = () => {
                             <div
                                 className="ml1 pointer black"
                                 onClick={() => {
-                                    localStorage.removeItem(AUTH_TOKEN);
-                                    navigate(`/`);
+                                    localStorage.removeItem(AUTH_TOKEN)
+                                    localStorage.removeItem('User')
+                                    navigate(`/`)
                                 }}
                             >
                                 logout

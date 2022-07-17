@@ -55,6 +55,7 @@ type Link {
     createdAt: DateTime!
     postedBy: User
     votes: [Vote!]!
+    comments: [Comment!]!
 }
 
 type AuthPayload {
@@ -73,6 +74,7 @@ type Comment {
     text: String!
     user: User
     link: Link
+    createdAt: DateTime!
 }
 
 # Sorting
