@@ -122,10 +122,13 @@ const Link = (props) => {
                     {link.votes ? link.votes?.length : 0} votes | by{' '}
                     {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
                     {timeDifferenceForDate(link.createdAt)}
+                    <RouteLink to={`/view/link/${link.id}`}>
+                        View
+                    </RouteLink>
                 </div>
                 {authToken && id === loggedInUser && (
                     <>
-                        <RouteLink to={`/link/${link.id}`}>
+                        <RouteLink to={`/update/link/${link.id}`}>
                             Update
                         </RouteLink>
                         <button onClick={deleteLink}>Delete</button>

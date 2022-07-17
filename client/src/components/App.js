@@ -1,4 +1,4 @@
-import { CreateLink, LinkList, UpdateLink } from 'components/links'
+import { CreateLink, LinkList, UpdateLink, LinkPage } from 'components/links'
 import { Login, Profile } from 'components/auth'
 import { Header } from 'components/layout'
 import { Search } from 'components/search'
@@ -30,8 +30,12 @@ function App() {
                         element={<LinkList />}
                     />
                     <Route
-                        path="/link/:id"
+                        path="/update/link/:id"
                         element={<UpdateLink />}
+                    />
+                    <Route
+                        path="/view/link/:id"
+                        element={<LinkPage />}
                     />
                     <Route
                         path="/profile/:id"
