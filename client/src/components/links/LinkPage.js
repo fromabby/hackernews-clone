@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { SINGLE_LINK_QUERY } from 'gql/queries'
 import { CommentList, CommentBox } from 'components/comments'
 import { timeDifferenceForDate } from 'utils'
-import { NEW_COMMENT_SUBSCRIPTION } from 'gql/subscriptions'
+import { NEW_COMMENT_SUBSCRIPTION, DELETE_COMMENT_SUBSCRIPTION } from 'gql/subscriptions'
 const LinkPage = () => {
     const { id } = useParams()
 
@@ -48,9 +48,8 @@ const LinkPage = () => {
             if (!data) return prev
 
             const newComment = data.newComment
-            const exists = findLink.comments.find(
-                ({ id }) => id === newComment.id
-            )
+
+            const exists = findLink.comments.find(({ id }) => id === newComment.id)
 
             if (exists) return prev
 
@@ -59,6 +58,26 @@ const LinkPage = () => {
                     ...findLink,
                     comments: [...findLink.comments, newComment],
                     __typename: findLink.__typename
+                }
+            })
+        }
+    })
+
+    subscribeToMore({
+        document: DELETE_COMMENT_SUBSCRIPTION, // graphql subscription for delete user
+        updateQuery: (prev, { subscriptionData }) => {
+            const { data } = subscriptionData
+            const { findLink } = prev
+            const { comments } = findLink
+
+            if (!data) return prev
+            const { deleteComment } = data
+            const updatedComments = comments.filter(c => c.id !== deleteComment.id)
+
+            return Object.assign({}, prev, {
+                findLink: {
+                    ...findLink,
+                    comments: updatedComments
                 }
             })
         }
@@ -76,7 +95,7 @@ const LinkPage = () => {
                     {timeDifferenceForDate(createdAt)}
                 </div>
                 <hr style={{ margin: '10px 0' }} />
-                <CommentList comments={comments} />
+                <CommentList comments={comments} linkId={linkId} />
                 <CommentBox linkId={linkId} />
             </>}
         </div>

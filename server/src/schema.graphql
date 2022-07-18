@@ -3,6 +3,7 @@ type Subscription {
     newVote: Vote
     deleteVote: Vote
     newComment: Comment
+    deleteComment: Comment
 }
 
 type Query {
@@ -23,12 +24,9 @@ type AllLinks {
 }
 
 type Mutation {
+    # Links
     postLink(url: String!, description: String!): Link!
-
-    # Update a link
     updateLink(id: ID!, url: String, description: String): Link
-
-    # Delete a link
     deleteLink(id: ID!): Link
 
     # Authentication
@@ -38,7 +36,9 @@ type Mutation {
     # Voting
     vote(linkId: ID!): Vote
 
-    postComment(text: String, linkId: ID!, userId: ID!): Comment
+    # Comment
+    postComment(text: String, linkId: ID!, userId: ID!): Comment!
+    deleteComment(id: ID!): Comment
 }
 
 type User {

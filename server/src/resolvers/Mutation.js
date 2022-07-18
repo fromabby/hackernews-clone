@@ -149,6 +149,22 @@ const postComment = async (_, args, context) => {
     return comment
 }
 
+const deleteComment = async (_, args, context) => {
+    const { id } = args
+
+    const comment = await context.prisma.comment.delete({
+        where: { id: Number(id) }
+    })
+
+    if (!Boolean(comment)) {
+        throw new Error('Cannot find comment')
+    }
+
+    context.pubsub.publish("DELETE_COMMENT", comment)
+
+    return comment
+}
+
 module.exports = {
     postLink,
     updateLink,
@@ -156,5 +172,6 @@ module.exports = {
     signup,
     login,
     vote,
-    postComment
+    postComment,
+    deleteComment
 }

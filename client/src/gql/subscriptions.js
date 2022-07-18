@@ -64,3 +64,19 @@ subscription {
   }
 }
 `
+
+export const DELETE_COMMENT_SUBSCRIPTION = gql`
+subscription {
+  deleteComment {
+    id
+    text
+    createdAt
+    user {
+      id
+      name
+    }
+    link {
+      id
+    }
+  }
+}`

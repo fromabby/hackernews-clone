@@ -101,3 +101,15 @@ mutation PostComment(
   }
 }
 `
+
+export const DELETE_COMMENT_MUTATION = gql`
+mutation DeleteComment(
+  $id:ID!
+) {
+  deleteComment(id:$id) {
+		id
+        text
+        createdAt
+  }
+}
+`

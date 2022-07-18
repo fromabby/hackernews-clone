@@ -73,6 +73,9 @@ query SingleLink(
                 id
                 name
             }
+            link {
+                id
+            }
         }
         postedBy {
             id
